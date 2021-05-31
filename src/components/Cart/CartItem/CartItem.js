@@ -30,7 +30,7 @@ const CartItem = ({ item, updateCartQty, removeFromCart }) => {
 						type='button'
 						size='small'
 						onClick={() => {
-							updateCartQty(item.id, --item.quantity);
+							updateCartQty(item.id, item.quantity - 1);
 						}}>
 						-
 					</Button>
@@ -39,7 +39,7 @@ const CartItem = ({ item, updateCartQty, removeFromCart }) => {
 						type='button'
 						size='small'
 						onClick={() => {
-							updateCartQty(item.id, ++item.quantity);
+							updateCartQty(item.id, item.quantity + 1);
 						}}>
 						+
 					</Button>

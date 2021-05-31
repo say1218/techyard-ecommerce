@@ -1,16 +1,17 @@
 import { Container, Typography, Button, Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import CartItem from "./CartItem/CartItem";
+import { Link } from "react-router-dom";
 
-const Cart = ({ cart, updateCartQty, removeFromCart }) => {
+const Cart = ({ cart, updateCartQty, removeFromCart, emptyCart }) => {
 	console.log(cart);
-	//const isEmpty = cart ? !cart.line_items.length : false;
 	const classes = useStyles();
 
 	//function returning jsx
 	const EmptyCart = () => (
 		<Typography variant='subtittle1'>
-			You have no items in youe shopping cart! Please start adding some!
+			You have no items in youe shopping cart,
+			<Link to='/'>start adding some</Link>
 		</Typography>
 	);
 
@@ -37,7 +38,8 @@ const Cart = ({ cart, updateCartQty, removeFromCart }) => {
 						size='large'
 						type='button'
 						variant='contained'
-						color='secondary'>
+						color='secondary'
+						onClick={emptyCart}>
 						Empty Cart
 					</Button>
 
@@ -46,7 +48,9 @@ const Cart = ({ cart, updateCartQty, removeFromCart }) => {
 						size='large'
 						type='button'
 						variant='contained'
-						color='primary'>
+						color='primary'
+						component={Link}
+						to='/checkout'>
 						Checkout
 					</Button>
 				</div>
