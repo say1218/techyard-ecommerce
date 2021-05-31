@@ -1,5 +1,3 @@
-import useStyles from "./styles";
-
 import {
 	AppBar,
 	Toolbar,
@@ -10,7 +8,10 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+
 import logo from "../../assets/laptop.svg";
+import useStyles from "./styles";
 
 const Navbar = ({ totalItems }) => {
 	const classes = useStyles();
@@ -18,7 +19,12 @@ const Navbar = ({ totalItems }) => {
 		<>
 			<AppBar position='fixed' className={classes.appBar} color='inherit'>
 				<Toolbar>
-					<Typography variant='h6' className={classes.title} color='inherit'>
+					<Typography
+						component='Link'
+						to='/'
+						variant='h6'
+						className={classes.title}
+						color='inherit'>
 						<img
 							src={logo}
 							alt='iStore'
@@ -29,11 +35,17 @@ const Navbar = ({ totalItems }) => {
 					</Typography>
 					<div className={classes.grow}></div>
 					<div className={classes.button}>
-						<IconButton aria-label='Show Cart Items' color='inherit'>
+						{/* <Link to='/cart'> */}
+						<IconButton
+							component={Link}
+							to='/cart'
+							aria-label='Show Cart Items'
+							color='inherit'>
 							<Badge badgeContent={totalItems} color='secondary'>
 								<ShoppingCart></ShoppingCart>
 							</Badge>
 						</IconButton>
+						{/* </Link> */}
 					</div>
 				</Toolbar>
 			</AppBar>
