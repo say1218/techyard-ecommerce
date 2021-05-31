@@ -4,8 +4,6 @@ import {
 	Elements,
 	CardElement,
 	ElementsConsumer,
-	useStripe,
-	useElements,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 

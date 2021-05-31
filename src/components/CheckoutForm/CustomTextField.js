@@ -12,6 +12,7 @@ const FormInput = ({ required, name, label }) => {
 				name={name}
 				label={label}
 				control={control}
+				defaultValue=''
 				fullWidth
 				render={({ field }) => (
 					<TextField label={label} required={required} {...field} />
