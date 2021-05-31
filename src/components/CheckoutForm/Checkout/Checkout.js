@@ -14,10 +14,11 @@ import useStyles from "./styles";
 import AddressForm from "../Address";
 import PaymentForm from "../Payment";
 import { commerce } from "../../../lib/commerce";
+import { Link } from "react-router-dom";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({ cart }) => {
+const Checkout = ({ cart, order, error, handleCaptureCheckout }) => {
 	const classes = useStyles();
 	const [activeStep, setActiveStep] = useState(0);
 	const [checkOutToken, setCheckOutToken] = useState(null);
@@ -56,10 +57,38 @@ const Checkout = ({ cart }) => {
 		activeStep === 0 ? (
 			<AddressForm checkOutToken={checkOutToken} next={saveShippingData} />
 		) : (
-			<PaymentForm checkOutToken={checkOutToken} />
+			<PaymentForm
+				checkOutToken={checkOutToken}
+				shippingData={shippingData}
+				nextStep={nextStep}
+				backStep={backStep}
+				onCaptureCheckout={handleCaptureCheckout}
+			/>
 		);
 
-	const Confirmation = () => <div>Confirmation</div>;
+	let Confirmation = () =>
+		order.customer ? (
+			<>
+				<div>
+					<Typography variant='h5'>
+						Thank you for your purchase, {order.customer.firstname}{" "}
+						{order.customer.lastname}!
+					</Typography>
+					<Divider className={classes.divider} />
+					<Typography variant='subtitle2'>
+						Order ref: {order.customer_reference}
+					</Typography>
+				</div>
+				<br />
+				<Button component={Link} variant='outlined' type='button' to='/'>
+					Back to home
+				</Button>
+			</>
+		) : (
+			<div className={classes.spinner}>
+				<CircularProgress />
+			</div>
+		);
 
 	return (
 		<>
