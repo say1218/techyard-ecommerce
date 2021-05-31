@@ -12,13 +12,13 @@ import {
 import { ShoppingCart } from "@material-ui/icons";
 import logo from "../../assets/laptop.svg";
 
-const Navbar = () => {
+const Navbar = ({ totalItems }) => {
 	const classes = useStyles();
 	return (
 		<>
 			<AppBar position='fixed' className={classes.appBar} color='inherit'>
 				<Toolbar>
-					<Typography>
+					<Typography variant='h6' className={classes.title} color='inherit'>
 						<img
 							src={logo}
 							alt='iStore'
@@ -30,7 +30,7 @@ const Navbar = () => {
 					<div className={classes.grow}></div>
 					<div className={classes.button}>
 						<IconButton aria-label='Show Cart Items' color='inherit'>
-							<Badge bagdeContent={2} color='secondary'>
+							<Badge badgeContent={totalItems} color='secondary'>
 								<ShoppingCart></ShoppingCart>
 							</Badge>
 						</IconButton>
