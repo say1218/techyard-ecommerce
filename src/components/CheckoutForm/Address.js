@@ -25,7 +25,7 @@ const AddressForm = ({ checkOutToken }) => {
 	const [shippingOptionArray, setShippingOptionArray] = useState([]);
 
 	useEffect(() => {
-		fetchShippingLocale();
+		fetchShippingLocale(checkOutToken);
 	}, [checkOutToken]);
 
 	useEffect(() => {
@@ -33,17 +33,19 @@ const AddressForm = ({ checkOutToken }) => {
 	}, [shippingCountry]);
 
 	useEffect(() => {
-		//not passing region, becos not applicable
-		if (shippingCountry)
-			fetchShippingOptions(checkOutToken.id, shippingCountry);
-	}, [shippingCountry]);
+		if (shippingSubdivision)
+			fetchShippingOptions(
+				checkOutToken.id,
+				shippingCountry,
+				shippingSubdivision
+			);
+	}, [checkOutToken, shippingCountry, shippingSubdivision]);
 
-	const fetchShippingLocale = async () => {
+	const fetchShippingLocale = async (checkOutToken) => {
 		let { countries } = await commerce.services.localeListShippingCountries(
 			checkOutToken.id
 		);
 		setShippingCountryArray(countries);
-
 		//since there is only one shipping country
 		setShippingCountry(Object.keys(countries)[0]);
 	};
@@ -66,7 +68,7 @@ const AddressForm = ({ checkOutToken }) => {
 			region,
 		});
 		setShippingOptionArray(options);
-		setShippingOption(options[0]);
+		setShippingOption(options[0].id);
 		console.log("shipping options", options);
 	};
 
