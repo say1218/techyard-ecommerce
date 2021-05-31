@@ -16,10 +16,6 @@ import useStyles from "./styles";
 const Navbar = ({ totalItems }) => {
 	const classes = useStyles();
 	const location = useLocation();
-
-	// if(location.pathname === '/'){
-
-	// }
 	return (
 		<>
 			<AppBar position='fixed' className={classes.appBar} color='inherit'>
@@ -40,7 +36,7 @@ const Navbar = ({ totalItems }) => {
 					</Typography>
 					<div className={classes.grow}></div>
 
-					{location.pathname === "/" ? (
+					{location.pathname === "/" && (
 						<div className={classes.button}>
 							<IconButton
 								component={Link}
@@ -52,7 +48,7 @@ const Navbar = ({ totalItems }) => {
 								</Badge>
 							</IconButton>
 						</div>
-					) : null}
+					)}
 				</Toolbar>
 			</AppBar>
 		</>
