@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	CssBaseline,
 	Paper,
@@ -13,15 +13,37 @@ import {
 import useStyles from "./styles";
 import AddressForm from "../Address";
 import PaymentForm from "../Payment";
+import { commerce } from "../../../lib/commerce";
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = () => {
+const Checkout = ({ cart }) => {
 	const classes = useStyles();
-	const [activeStep, setActiveStep] = useState(2);
+	const [activeStep, setActiveStep] = useState(0);
+	const [checkOutToken, setCheckOutToken] = useState(null);
+
+	useEffect(() => {
+		console.log("cart is", cart);
+		const generateToken = async () => {
+			try {
+				let token = await commerce.checkout.generateToken(cart.id, {
+					type: "cart",
+				});
+				console.log("token is", token);
+				setCheckOutToken(token);
+			} catch (error) {}
+		};
+		generateToken();
+	}, [cart]);
+	//putting in cart in depenedency because token needs to be generated everytime cart changes
 
 	//function returning jsx, will be used as element in return
-	const Form = () => (activeStep === 0 ? <AddressForm /> : <PaymentForm />);
+	const Form = () =>
+		activeStep === 0 ? (
+			<AddressForm checkOutToken={checkOutToken} />
+		) : (
+			<PaymentForm />
+		);
 
 	const Confirmation = () => <div>Confirmation</div>;
 
@@ -40,7 +62,12 @@ const Checkout = () => {
 							</Step>
 						))}
 					</Stepper>
-					{activeStep === steps.length ? <Confirmation /> : <Form></Form>}
+					{activeStep === steps.length ? (
+						<Confirmation />
+					) : (
+						//this is because the form depends on the checkout token
+						checkOutToken && <Form></Form>
+					)}
 				</Paper>
 			</main>
 		</>

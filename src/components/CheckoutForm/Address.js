@@ -19,6 +19,10 @@ const AddressForm = ({ checkOutToken }) => {
 		console.log("submitting form");
 	};
 
+	useEffect(() => {
+		console.log("token in addresss --> ", checkOutToken);
+	}, []);
+
 	return (
 		<>
 			<Typography variant='h6' gutterBottom>
