@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 import { commerce } from "../../lib/commerce";
 
-const AddressForm = ({ checkOutToken, saveShippingData }) => {
+const AddressForm = ({ checkOutToken, next }) => {
 	const methods = useForm();
 
 	const [shippingCountry, setShippingCountry] = useState("");
@@ -77,10 +77,6 @@ const AddressForm = ({ checkOutToken, saveShippingData }) => {
 		console.log("shipping options", options);
 	};
 
-	const submitForm = () => {
-		console.log("submitting form");
-	};
-
 	return (
 		<>
 			<Typography variant='h6' gutterBottom>
@@ -89,7 +85,7 @@ const AddressForm = ({ checkOutToken, saveShippingData }) => {
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit((data) =>
-						saveShippingData({
+						next({
 							...data,
 							shippingCountry,
 							shippingSubdivision,

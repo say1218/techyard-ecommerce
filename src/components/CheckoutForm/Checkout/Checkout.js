@@ -38,17 +38,23 @@ const Checkout = ({ cart }) => {
 	}, [cart]);
 	//putting in cart in depenedency because token needs to be generated everytime cart changes
 
+	const nextStep = () => {
+		setActiveStep((prevValue) => prevValue + 1);
+	};
+
+	const backStep = () => {
+		setActiveStep((prevValue) => prevValue - 1);
+	};
+
 	const saveShippingData = (shippingObj) => {
-		console.log(shippingObj);
+		setShippingData(shippingObj);
+		nextStep();
 	};
 
 	//function returning jsx, will be used as element in return
 	const Form = () =>
 		activeStep === 0 ? (
-			<AddressForm
-				checkOutToken={checkOutToken}
-				saveShippingData={saveShippingData}
-			/>
+			<AddressForm checkOutToken={checkOutToken} next={saveShippingData} />
 		) : (
 			<PaymentForm />
 		);
