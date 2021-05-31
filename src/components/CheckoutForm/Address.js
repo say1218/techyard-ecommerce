@@ -9,10 +9,11 @@ import {
 } from "@material-ui/core";
 import { useForm, FormProvider } from "react-hook-form";
 import FormInput from "./CustomTextField";
+import { Link } from "react-router-dom";
 
 import { commerce } from "../../lib/commerce";
 
-const AddressForm = ({ checkOutToken }) => {
+const AddressForm = ({ checkOutToken, saveShippingData }) => {
 	const methods = useForm();
 
 	const [shippingCountry, setShippingCountry] = useState("");
@@ -25,14 +26,17 @@ const AddressForm = ({ checkOutToken }) => {
 	const [shippingOptionArray, setShippingOptionArray] = useState([]);
 
 	useEffect(() => {
-		fetchShippingLocale(checkOutToken);
-	}, [checkOutToken]);
+		console.log("first useeffect to fetch countries");
+		fetchShippingCountries(checkOutToken.id);
+	}, []);
 
 	useEffect(() => {
+		console.log("secind useeffect to fetch states");
 		if (shippingCountry) fetchShippingSubdivision(shippingCountry);
 	}, [shippingCountry]);
 
 	useEffect(() => {
+		console.log("third useeffect to fetch charges" + shippingCountry);
 		if (shippingSubdivision)
 			fetchShippingOptions(
 				checkOutToken.id,
@@ -41,19 +45,20 @@ const AddressForm = ({ checkOutToken }) => {
 			);
 	}, [checkOutToken, shippingCountry, shippingSubdivision]);
 
-	const fetchShippingLocale = async (checkOutToken) => {
-		let { countries } = await commerce.services.localeListShippingCountries(
-			checkOutToken.id
+	const fetchShippingCountries = async (checkOutTokenId) => {
+		console.log("in fetch shipping locale id is--> " + checkOutTokenId);
+		const { countries } = await commerce.services.localeListShippingCountries(
+			checkOutTokenId
 		);
+
+		console.log("shipping cpountries", countries);
 		setShippingCountryArray(countries);
 		//since there is only one shipping country
 		setShippingCountry(Object.keys(countries)[0]);
 	};
 
 	const fetchShippingSubdivision = async (shippingCountry) => {
-		let { subdivisions } = await commerce.services.localeListSubdivisions(
-			shippingCountry
-		);
+		let { subdivisions } = await commerce.services.localeListSubdivisions("IN");
 		console.log("subdivs", subdivisions);
 		//setting the array for sleect dropdown
 		setShippingSubdivisionArray(subdivisions);
@@ -82,14 +87,22 @@ const AddressForm = ({ checkOutToken }) => {
 				Shipping address
 			</Typography>
 			<FormProvider {...methods}>
-				<form onSubmit={submitForm}>
+				<form
+					onSubmit={methods.handleSubmit((data) =>
+						saveShippingData({
+							...data,
+							shippingCountry,
+							shippingSubdivision,
+							shippingOption,
+						})
+					)}>
 					<Grid container spacing={3}>
-						<FormInput required name='firstName' label='First name' />
-						<FormInput required name='lastName' label='Last name' />
-						<FormInput required name='address1' label='Address line 1' />
-						<FormInput required name='email' label='Email' />
-						<FormInput required name='city' label='City' />
-						<FormInput required name='zip' label='Zip / Postal code' />
+						<FormInput name='firstName' label='First name' />
+						<FormInput name='lastName' label='Last name' />
+						<FormInput name='address1' label='Address line 1' />
+						<FormInput name='email' label='Email' />
+						<FormInput name='city' label='City' />
+						<FormInput name='zip' label='Zip / Postal code' />
 						<Grid item xs={12} sm={6}>
 							<InputLabel>Shipping Subdivision</InputLabel>
 							<Select
@@ -124,6 +137,15 @@ const AddressForm = ({ checkOutToken }) => {
 							</Select>
 						</Grid>
 					</Grid>
+					<br />
+					<div style={{ display: "flex", justifyContent: "space-between" }}>
+						<Button component={Link} variant='outlined' to='/cart'>
+							Back to Cart
+						</Button>
+						<Button type='submit' variant='contained' color='primary'>
+							Next
+						</Button>
+					</div>
 				</form>
 			</FormProvider>
 		</>

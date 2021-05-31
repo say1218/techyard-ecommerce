@@ -21,6 +21,7 @@ const Checkout = ({ cart }) => {
 	const classes = useStyles();
 	const [activeStep, setActiveStep] = useState(0);
 	const [checkOutToken, setCheckOutToken] = useState(null);
+	const [shippingData, setShippingData] = useState({});
 
 	useEffect(() => {
 		console.log("cart is", cart);
@@ -37,10 +38,17 @@ const Checkout = ({ cart }) => {
 	}, [cart]);
 	//putting in cart in depenedency because token needs to be generated everytime cart changes
 
+	const saveShippingData = (shippingObj) => {
+		console.log(shippingObj);
+	};
+
 	//function returning jsx, will be used as element in return
 	const Form = () =>
 		activeStep === 0 ? (
-			<AddressForm checkOutToken={checkOutToken} />
+			<AddressForm
+				checkOutToken={checkOutToken}
+				saveShippingData={saveShippingData}
+			/>
 		) : (
 			<PaymentForm />
 		);
